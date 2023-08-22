@@ -19,11 +19,11 @@ import { BadRequestError } from "../error/BadRequestError";
 import { NotAuthenticatedError } from "../error/NotAuthenticatedError";
 import { NotFoundError } from "../error/NotFoundError";
 import { UnauthorizedError } from "../error/UnauthorizedError";
-import { LikeDislike } from "../models/LikeDislikePost";
 import { Posts, PostsDB, PostsModel, PostsWithCreator } from "../models/Posts";
 import { UserDB, userRole } from "../models/Users";
 import { TokenManager, TokenPayload } from "../services/TokenManager";
 import { IdGenerator } from "../services/idGenerator";
+import { LikeDislike } from "../models/LikeDislikePost";
 
 export class PostBusiness {
   constructor(
