@@ -15,7 +15,7 @@ export class CommentsDatabase extends BaseDatabase {
       `${CommentsDatabase.TABLE_COMMENTS}.like`,
       `${CommentsDatabase.TABLE_COMMENTS}.dislike`,
       `${CommentsDatabase.TABLE_COMMENTS}.created_at`,
-      `${CommentsDatabase.TABLE_COMMENTS}.updated_at`,
+      `${CommentsDatabase.TABLE_COMMENTS}.updated_at`
     ).join(
       `${UsersDatabase.USERS_TABLES}`,
       `${CommentsDatabase.TABLE_COMMENTS}.creator_id`,
@@ -29,14 +29,18 @@ export class CommentsDatabase extends BaseDatabase {
     await BaseDatabase.connection(CommentsDatabase.TABLE_COMMENTS).insert(comment)
   }
 
-  public async getCommentById(id: string) {
+  public getCommentById = async (id: string): Promise<Array<ComentsDB>> => {
     const result: Array<ComentsDB> = await BaseDatabase.connection(CommentsDatabase.TABLE_COMMENTS).where({ id })
     return result
   }
 
-  public async editComment(newComment: ComentsDB, id: string) {
+  public editComment = async (newComment: ComentsDB, id: string): Promise<void> => {
     await BaseDatabase
       .connection(CommentsDatabase.TABLE_COMMENTS)
       .update(newComment).where({ id })
+  }
+
+  public deleteComent = async (id: string): Promise<void> => {
+    await BaseDatabase.connection(CommentsDatabase.TABLE_COMMENTS).delete().where({ id })
   }
 }

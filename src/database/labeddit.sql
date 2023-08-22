@@ -46,6 +46,8 @@ CREATE TABLE
         FOREIGN KEY (post_id) REFERENCES posts(id) ON UPDATE CASCADE ON DELETE CASCADE
     );
 
+SELECT * FROM comments;
+
 CREATE TABLE
     like_dislike_comments(
         user_id TEXT NOT NULL,
