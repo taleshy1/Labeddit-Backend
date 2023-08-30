@@ -12,6 +12,7 @@ import { NotFoundError } from "../error/NotFoundError";
 import { UnauthorizedError } from "../error/UnauthorizedError";
 import { Comments, CommentsWithCreatorInfo } from "../models/Comments";
 import { LikeDislikeComment } from "../models/LikeDislikeComment";
+import { Posts } from "../models/Posts";
 import { userRole } from "../models/Users";
 import { TokenManager, TokenPayload } from "../services/TokenManager";
 import { IdGenerator } from "../services/idGenerator";
@@ -87,7 +88,17 @@ export class commentBusiness {
       new Date().toISOString()
     ).toDbModel()
     await this.commentDatabase.createComment(newComment)
-
+    const updatedPost = new Posts(
+      post.id,
+      post.creator_id,
+      post.content,
+      post.comments + 1,
+      post.likes,
+      post.dislikes,
+      post.created_at,
+      post.updated_at
+    )
+    await this.postDatabase.editPost(updatedPost.toDBModel(), postId)
     return undefined
   }
 

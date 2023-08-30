@@ -60,6 +60,7 @@ export class UserBusiness {
     if (!exists) {
       throw new BadRequestError("Usuario não existe")
     }
+
     const passwordIsCorrect: boolean = await this.hashManager.compare(password, exists.password)
 
     if (!passwordIsCorrect) {
