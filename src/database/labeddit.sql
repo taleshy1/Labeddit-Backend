@@ -67,6 +67,8 @@ VALUES (
         "Admin"
     );
 
+SELECT * FROM like_dislike_comments;
+
 -- Este usuario acima possui as seguintes credenciais:
 
 -- email: admin@email.com

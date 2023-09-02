@@ -1,4 +1,4 @@
-export interface ComentsDB {
+export interface CommentsDB {
   id: string,
   creator_id: string,
   post_id: string,
@@ -30,6 +30,7 @@ export interface CommentsModel {
   dislike: number,
   createdAt: string,
   updatedAt: string,
+  userLiked?: number | undefined,
   creatorName?: string
 }
 
@@ -111,7 +112,7 @@ export class Comments {
     this.updatedAt = value
   }
 
-  public toDbModel(): ComentsDB {
+  public toDbModel(): CommentsDB {
     return ({
       id: this.id,
       creator_id: this.creatorId,
@@ -149,6 +150,7 @@ export class CommentsWithCreatorInfo extends Comments {
     dislike: number,
     createdAt: string,
     updatedAt: string,
+    private userLiked: number | undefined,
     private creatorName: string
   ) {
     super(id, creatorId, postId, content, like, dislike, createdAt, updatedAt)
@@ -158,6 +160,14 @@ export class CommentsWithCreatorInfo extends Comments {
   }
   public setCreatorName(value: string): void {
     this.creatorName = value
+  }
+
+  public getUserLiked(): number | undefined {
+    return this.userLiked
+  }
+
+  public setUserLiked(v: number | undefined) {
+    this.userLiked = v
   }
 
   public toModelWithCreatorName(): CommentsModel {
@@ -170,6 +180,7 @@ export class CommentsWithCreatorInfo extends Comments {
       dislike: this.getDislike(),
       createdAt: this.getCreatedAt(),
       updatedAt: this.getUpdatedAt(),
+      userLiked: this.userLiked,
       creatorName: this.creatorName
     }
   }

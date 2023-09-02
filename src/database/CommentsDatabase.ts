@@ -1,4 +1,4 @@
-import { ComentsDB, ComentsDBWithCreatorName } from "../models/Comments";
+import { CommentsDB, ComentsDBWithCreatorName } from "../models/Comments";
 import { BaseDatabase } from "./BaseDatabase";
 import { UsersDatabase } from "./UserDatabase";
 
@@ -25,16 +25,16 @@ export class CommentsDatabase extends BaseDatabase {
     return result
   }
 
-  public createComment = async (comment: ComentsDB): Promise<void> => {
+  public createComment = async (comment: CommentsDB): Promise<void> => {
     await BaseDatabase.connection(CommentsDatabase.TABLE_COMMENTS).insert(comment)
   }
 
-  public getCommentById = async (id: string): Promise<Array<ComentsDB>> => {
-    const result: Array<ComentsDB> = await BaseDatabase.connection(CommentsDatabase.TABLE_COMMENTS).where({ id })
+  public getCommentById = async (id: string): Promise<Array<CommentsDB>> => {
+    const result: Array<CommentsDB> = await BaseDatabase.connection(CommentsDatabase.TABLE_COMMENTS).where({ id })
     return result
   }
 
-  public editComment = async (newComment: ComentsDB, id: string): Promise<void> => {
+  public editComment = async (newComment: CommentsDB, id: string): Promise<void> => {
     await BaseDatabase
       .connection(CommentsDatabase.TABLE_COMMENTS)
       .update(newComment).where({ id })
