@@ -9,6 +9,11 @@ export class LikeDislikeCommentDatabase extends BaseDatabase {
     return result
   }
 
+  public getUserLikedPost = async (id: string, userId: string): Promise<Array<LikeDislikeCommentDB>> => {
+    const result = BaseDatabase.connection(LikeDislikeCommentDatabase.LIKE_DISLIKE_TABLE).where({ comment_id: id }).andWhere({ user_id: userId })
+    return result
+  }
+
   public createLikeDislikeComment = async (newLikeDislikeComment: LikeDislikeCommentDB): Promise<void> => {
     await BaseDatabase
       .connection(LikeDislikeCommentDatabase.LIKE_DISLIKE_TABLE)

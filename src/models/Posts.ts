@@ -1,4 +1,3 @@
-import { CommentsWithCreatorInfo } from "./Comments";
 
 export interface PostsDB {
   id: string,
@@ -20,6 +19,7 @@ export interface PostsModel {
   dislikes: number,
   createdAt: string,
   updatedAt: string,
+  userLiked?: number | undefined
   creator?: { id: string, name: string }
 }
 
@@ -137,6 +137,7 @@ export class PostsWithCreator extends Posts {
     dislikes: number,
     createdAt: string,
     updatedAt: string,
+    private userLiked: number | undefined,
     private name: string
   ) {
     super(id, creatorId, content, comments, likes, dislikes, createdAt, updatedAt);
@@ -146,6 +147,12 @@ export class PostsWithCreator extends Posts {
   }
   public setName(v: string): void {
     this.name = v
+  }
+  public getUserLiked(): number | undefined {
+    return this.userLiked
+  }
+  public setUserLiked(v: number | undefined): void {
+    this.userLiked = v
   }
 
   public toBusinessModelWithCreator(): PostsModel {
@@ -157,6 +164,7 @@ export class PostsWithCreator extends Posts {
       dislikes: this.getDislikes(),
       createdAt: this.getCreatedAt(),
       updatedAt: this.getUpdatedAt(),
+      userLiked: this.userLiked,
       creator: {
         id: this.getCreatorId(),
         name: this.name

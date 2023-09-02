@@ -24,6 +24,7 @@ import { UserDB, userRole } from "../models/Users";
 import { TokenManager, TokenPayload } from "../services/TokenManager";
 import { IdGenerator } from "../services/idGenerator";
 import { LikeDislike } from "../models/LikeDislikePost";
+import { GetPostByIdInputDTO, GetPostByIdOutputDTO } from "../dtos/posts/getPostById.dto"
 
 export class PostBusiness {
   constructor(
@@ -31,8 +32,38 @@ export class PostBusiness {
     private idGenerator: IdGenerator,
     private tokenManager: TokenManager,
     private likeOrDislikeDatabase: LikeOrDislikeDatabase,
-    private userDataBase: UsersDatabase,
+    private userDataBase: UsersDatabase
   ) { }
+
+  public getPostById = async (input: GetPostByIdInputDTO): Promise<GetPostByIdOutputDTO> => {
+    const { token, id } = input
+    const isAuthenticaded: TokenPayload | null = this.tokenManager.getPayload(token)
+    if (!isAuthenticaded) {
+      throw new NotAuthenticatedError();
+    }
+
+    const [post] = await this.postsDatabase.getPostById(id)
+
+    if (!post) {
+      throw new NotFoundError("Post não encontrado")
+    }
+    const [postCreator] = await this.userDataBase.getUserById(post.creator_id)
+    const [userLiked] = await this.likeOrDislikeDatabase.getThisUserLiked(id, isAuthenticaded.id)
+    const postModel = new PostsWithCreator(
+      post.id,
+      post.creator_id,
+      post.content,
+      post.comments,
+      post.likes,
+      post.dislikes,
+      post.created_at,
+      post.updated_at,
+      userLiked ? userLiked.like : undefined,
+      postCreator.name
+    ).toBusinessModelWithCreator()
+
+    return postModel
+  }
 
   public getPosts = async (
     input: GetPostsInputDTO
@@ -50,6 +81,8 @@ export class PostBusiness {
 
     const promisePostWithCreator: Array<Promise<PostsModel>> = postsDB.map(async (p) => {
       const [user]: Array<UserDB> = await this.userDataBase.getUserById(p.creator_id)
+      const [userLiked] = await this.likeOrDislikeDatabase.getThisUserLiked(p.id, isAuthenticaded.id)
+
       const post = new PostsWithCreator(
         p.id,
         p.creator_id,
@@ -59,6 +92,7 @@ export class PostBusiness {
         p.dislikes,
         p.updated_at,
         p.created_at,
+        userLiked ? userLiked.like : undefined,
         user.name
       )
       return post.toBusinessModelWithCreator()
