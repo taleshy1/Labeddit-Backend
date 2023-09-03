@@ -1,4 +1,4 @@
--- Active: 1692639359361@@127.0.0.1@3306-- Active: 1690566185172@@127.0.0.1@3306
+-- Active: 1693691453866@@127.0.0.1@1433
 
 CREATE TABLE
     users(
@@ -45,8 +45,6 @@ CREATE TABLE
         FOREIGN KEY (creator_id) REFERENCES users(id) ON UPDATE CASCADE ON DELETE CASCADE,
         FOREIGN KEY (post_id) REFERENCES posts(id) ON UPDATE CASCADE ON DELETE CASCADE
     );
-
-SELECT * FROM comments;
 
 CREATE TABLE
     like_dislike_comments(

@@ -162,7 +162,17 @@ export class CommentBusiness {
     }
 
     await this.commentDatabase.deleteComent(commentId);
-
+    const newPost = new Posts(
+      post.id,
+      post.creator_id,
+      post.content,
+      post.comments - 1,
+      post.likes,
+      post.dislikes,
+      post.created_at,
+      post.updated_at
+    ).toDBModel()
+    await this.postDatabase.editPost(newPost, postId)
     return "Comentario removido com sucesso";
   };
 
